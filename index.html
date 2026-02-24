@@ -146,7 +146,7 @@
             color: var(--text-light);
             text-align: right;
             margin-bottom: 30px;
-            min-height: 200px; /* يحافظ على حجم المربع أثناء الكتابة */
+            min-height: 200px;
         }
 
         .highlight {
@@ -221,17 +221,6 @@
             100% { opacity: 0; transform: scale(0); }
         }
 
-        .creator-tag {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 10px;
-            color: rgba(255,255,255,0.1);
-            z-index: 0;
-            pointer-events: none;
-        }
-
         @media (max-width: 600px) {
             .letter-header { font-size: 1.8rem; }
             .letter-content { font-size: 1.2rem; line-height: 1.9; }
@@ -262,7 +251,7 @@
             إلى أجمل ما رأت عيناي، إلى عشيقتي وأميرة قلبي <span class="highlight">أحلام</span>...<br><br>
             أكتب لكِ هذه الكلمات وقلبي يعتصر ندماً على كل لحظة حزن تسببت بها لعينيكِ الجميلتين. أنتِ لستِ فقط حبيبتي، بل أنتِ روحي التي أعيش بها، والنور الذي يضيء عتمة أيامي.<br><br>
             أعتذر منكِ بحجم السماء، وبعدد نجومها. أعلم أنني أخطأت، ولكنني أعلم أيضاً أن قلبكِ الأبيض يتسع لزلاتي.<br><br>
-            أرجوكِ، سامحيني.. فقلب <span class="highlight">صهيب</span> لا ينبض إلا بكِ، ولا يرى من نساء الأرض سواكِ. غيابكِ يطفئ الحياة في عيني، وابتسامتكِ هي طوق نجاتي.<br><br>
+            أرجوكِ، سامحيني.. فقلب <span class="highlight">شريان</span> لا ينبض إلا بكِ، ولا يرى من نساء الأرض سواكِ. غيابكِ يطفئ الحياة في عيني، وابتسامتكِ هي طوق نجاتي.<br><br>
             عودي لي، فكل شيء في هذا العالم يفقد معناه بدونكِ.
         </div>
 
@@ -270,13 +259,11 @@
         <div class="letter-footer" id="footer">
             <div class="letter-signature">
                 بحبك للأبد،<br>
-                صهيب
+                شريان
             </div>
             <button class="forgive-btn" onclick="acceptApology()">سامحتك ❤️</button>
         </div>
     </div>
-
-    <div class="creator-tag">إعداد: قيس جازي</div>
 
     <script>
         // Animations setup
@@ -360,7 +347,6 @@
                     i++;
                     
                     if (isTag) {
-                        // If it's part of an HTML tag, process immediately without delay
                         type();
                     } else {
                         // Human-like random typing delay
