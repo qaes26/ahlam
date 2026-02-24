@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى نبض قلبي أحلام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff2a5f;
+            --bg-dark: #0a0002;
+            --bg-light: #3a0010;
+            --gold: #d4af37;
+            --text-light: #ffe6eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            color: var(--text-light);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Floating Hearts Animation */
+        .heart-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -10%;
+            opacity: 0;
+            transform: translateY(0) scale(1);
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-120vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        /* Intro Screen */
+        #intro-screen {
+            position: absolute;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+        }
+
+        .pulsing-heart {
+            font-size: 5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 42, 95, 0.6));
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .pulsing-heart:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .intro-text {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: fadeInOut 3s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Letter Screen */
+        #letter-screen {
+            position: relative;
+            z-index: 5;
+            width: 90%;
+            max-width: 650px;
+            background: rgba(15, 0, 5, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 40px 35px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(212, 175, 55, 0.05);
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            pointer-events: none;
+            transition: all 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #letter-screen.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        #letter-screen::-webkit-scrollbar { width: 5px; }
+        #letter-screen::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 10px; }
+
+        .letter-header {
+            font-family: 'Cairo', sans-serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            font-weight: 800;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+
+        .letter-content {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            line-height: 2.2;
+            color: var(--text-light);
+            text-align: right;
+            margin-bottom: 30px;
+            min-height: 200px; /* يحافظ على حجم المربع أثناء الكتابة */
+        }
+
+        .highlight {
+            color: var(--primary-color);
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 42, 95, 0.5);
+        }
+
+        /* Typewriter Cursor */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: var(--gold);
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .letter-footer {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .letter-signature {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-align: left;
+            margin-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding-top: 20px;
+        }
+
+        .forgive-btn {
+            background: linear-gradient(45deg, var(--primary-color), #a80026);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(255, 42, 95, 0.3);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .forgive-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 42, 95, 0.6);
+        }
+
+        .dust {
+            position: absolute;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: sparkle linear infinite;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 0.8; transform: scale(1.5); box-shadow: 0 0 8px var(--gold); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        .creator-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: rgba(255,255,255,0.1);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            .letter-header { font-size: 1.8rem; }
+            .letter-content { font-size: 1.2rem; line-height: 1.9; }
+            #letter-screen { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-container" id="heart-container"></div>
+    <div class="heart-container" id="dust-container"></div>
+
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+        <div class="pulsing-heart" onclick="revealLetter()">❤️</div>
+        <div class="intro-text">اضغطي هنا يا أحلام</div>
+    </div>
+
+    <!-- The Apology Letter -->
+    <div id="letter-screen">
+        <h1 class="letter-header" id="header">إلى نبض قلبي</h1>
+        
+        <!-- Typewriter Container -->
+        <div class="letter-content" id="typewriter-container"></div>
+
+        <!-- Hidden text that will be typed out -->
+        <div id="hidden-text" style="display: none;">
+            إلى أجمل ما رأت عيناي، إلى عشيقتي وأميرة قلبي <span class="highlight">أحلام</span>...<br><br>
+            أكتب لكِ هذه الكلمات وقلبي يعتصر ندماً على كل لحظة حزن تسببت بها لعينيكِ الجميلتين. أنتِ لستِ فقط حبيبتي، بل أنتِ روحي التي أعيش بها، والنور الذي يضيء عتمة أيامي.<br><br>
+            أعتذر منكِ بحجم السماء، وبعدد نجومها. أعلم أنني أخطأت، ولكنني أعلم أيضاً أن قلبكِ الأبيض يتسع لزلاتي.<br><br>
+            أرجوكِ، سامحيني.. فقلب <span class="highlight">صهيب</span> لا ينبض إلا بكِ، ولا يرى من نساء الأرض سواكِ. غيابكِ يطفئ الحياة في عيني، وابتسامتكِ هي طوق نجاتي.<br><br>
+            عودي لي، فكل شيء في هذا العالم يفقد معناه بدونكِ.
+        </div>
+
+        <!-- Hidden Footer (Revealed after typing) -->
+        <div class="letter-footer" id="footer">
+            <div class="letter-signature">
+                بحبك للأبد،<br>
+                صهيب
+            </div>
+            <button class="forgive-btn" onclick="acceptApology()">سامحتك ❤️</button>
+        </div>
+    </div>
+
+    <div class="creator-tag">إعداد: قيس جازي</div>
+
+    <script>
+        // Animations setup
+        function createHearts() {
+            const container = document.getElementById('heart-container');
+            const hearts = ['❤️', '💖', '✨'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 12000);
+            }, 400);
+        }
+
+        function createDust() {
+            const container = document.getElementById('dust-container');
+            setInterval(() => {
+                const dust = document.createElement('div');
+                dust.classList.add('dust');
+                dust.style.left = Math.random() * 100 + 'vw';
+                dust.style.top = Math.random() * 100 + 'vh';
+                const size = Math.random() * 2.5 + 1;
+                dust.style.width = size + 'px';
+                dust.style.height = size + 'px';
+                dust.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                container.appendChild(dust);
+                setTimeout(() => dust.remove(), 3500);
+            }, 150);
+        }
+
+        // Letter Reveal & Typewriter Trigger
+        function revealLetter() {
+            const intro = document.getElementById('intro-screen');
+            const letter = document.getElementById('letter-screen');
+            const header = document.getElementById('header');
+            
+            intro.style.transform = 'scale(3) opacity(0)';
+            intro.style.opacity = '0';
+            
+            setTimeout(() => {
+                intro.style.display = 'none';
+                letter.classList.add('active');
+                header.style.opacity = '1';
+                
+                // Start typewriter after a short delay
+                setTimeout(() => {
+                    startTypewriter();
+                }, 1500);
+                
+            }, 1000);
+        }
+
+        // Typewriter Logic that supports HTML tags
+        function startTypewriter() {
+            const rawHTML = document.getElementById('hidden-text').innerHTML.trim();
+            const container = document.getElementById('typewriter-container');
+            container.innerHTML = '<span id="typed-text"></span><span class="cursor" id="cursor"></span>';
+            const textElement = document.getElementById('typed-text');
+            const cursorElement = document.getElementById('cursor');
+            
+            let i = 0;
+            let isTag = false;
+            let currentText = '';
+            
+            // Base typing speed in ms
+            const typingSpeed = 45; 
+
+            function type() {
+                if (i < rawHTML.length) {
+                    let char = rawHTML.charAt(i);
+                    
+                    if (char === '<') isTag = true;
+                    currentText += char;
+                    if (char === '>') isTag = false;
+                    
+                    textElement.innerHTML = currentText;
+                    i++;
+                    
+                    if (isTag) {
+                        // If it's part of an HTML tag, process immediately without delay
+                        type();
+                    } else {
+                        // Human-like random typing delay
+                        let randomDelay = typingSpeed + (Math.random() * 40 - 20);
+                        
+                        // Pause slightly longer at commas and periods
+                        if(char === '،' || char === '.') randomDelay += 300;
+                        
+                        setTimeout(type, randomDelay);
+                    }
+                } else {
+                    // Finished typing
+                    setTimeout(() => {
+                        cursorElement.style.display = 'none';
+                        document.getElementById('footer').style.opacity = '1';
+                    }, 500);
+                }
+            }
+            
+            type();
+        }
+
+        // Action when she clicks "I forgive you"
+        function acceptApology() {
+            const btn = document.querySelector('.forgive-btn');
+            btn.innerHTML = 'يا روحي إنتِ! أحبك ❤️';
+            btn.style.background = 'linear-gradient(45deg, #d4af37, #ff9900)';
+            btn.style.color = '#0a0002';
+            btn.style.fontWeight = 'bold';
+            
+            // Shower of fast hearts
+            for(let i=0; i<40; i++) {
+                setTimeout(() => {
+                    const container = document.getElementById('heart-container');
+                    const heart = document.createElement('div');
+                    heart.classList.add('floating-heart');
+                    heart.innerText = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (Math.random() * 35 + 20) + 'px';
+                    heart.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+                    container.appendChild(heart);
+                }, i * 40);
+            }
+        }
+
+        window.onload = () => {
+            createHearts();
+            createDust();
+        };
+    </script>
+</body>
+</html>
+
